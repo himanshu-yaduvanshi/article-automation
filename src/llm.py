@@ -6,13 +6,15 @@ import google.generativeai as genai
 load_dotenv()
 
 class LLM:
-    def __init__(self, logger, selected_llm="openai"):
+    def __init__(self, logger, selected_llm, llm_model, llm_model_api_key):
         self.logger         = logger
-        self.OPENAI_MODEL   = os.getenv("OPENAI_MODEL")
-        self.OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-        self.GEMINI_MODEL   = os.getenv("GEMINI_MODEL")
-        self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-        self.SELECTED_LLM   = selected_llm
+        # self.OPENAI_MODEL   = os.getenv("OPENAI_MODEL")
+        # self.OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        # self.GEMINI_MODEL   = os.getenv("GEMINI_MODEL")
+        # self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+        self.LLM_MODEL          = llm_model
+        self.LLM_MODEL_API_KEY  = llm_model_api_key
+        self.SELECTED_LLM       = selected_llm
         self.logger.info(f"{selected_llm} LLM instance initialized.")
     
     def run_llm(self, news_page_content):
@@ -58,17 +60,17 @@ class LLM:
         
         try:
             if self.SELECTED_LLM.lower()=="openai":            
-                client   = OpenAI(api_key=self.OPENAI_API_KEY, timeout=20, max_retries=3)
+                client   = OpenAI(api_key=self.LLM_MODEL_API_KEY, timeout=20, max_retries=3)
                 response = client.chat.completions.create(
-                    model=self.OPENAI_MODEL,
+                    model=self.LLM_MODEL,
                     messages=[
                         {"role": "user", "content": prompt}
                     ]
                 )
                 features = response.choices[0].message.content
             if self.SELECTED_LLM.lower()=="gemini":
-                genai.configure(api_key=self.GEMINI_API_KEY)
-                model    = genai.GenerativeModel(self.GEMINI_MODEL)
+                genai.configure(api_key=self.LLM_MODEL_API_KEY)
+                model    = genai.GenerativeModel(self.LLM_MODEL)
                 response = model.generate_content(prompt)
                 features = response.candidates[0].content.parts[0].text
             self.logger.info(f"{self.SELECTED_LLM.upper()} LLM Response: {features}")

@@ -96,6 +96,10 @@ def main():
 
     if not selected_llm_option:
         return
+    else:
+        llm_model         = st.text_input("LLM Model:", placeholder="gpt/gemini-flash")
+        llm_model_api_key = st.text_input("LLM Model API Key:", placeholder="api-key")
+
         # st.write(f"Selected LLM Model: {selected_llm_option}")
         
     if selected_src_option == "File Upload":    
@@ -169,7 +173,7 @@ def main():
                 # Add loading spinner while processing
                 with st.spinner('Scraping Articles and Extracting features from them...'):
                     # Initialize the LLM processor and Data Preprocessor
-                    llm_processor     = LLM(logger, selected_llm_option)
+                    llm_processor     = LLM(logger, selected_llm_option, llm_model, llm_model_api_key)
                     data_preprocessor = DataPreprocessor(logger)
                     
                     # Example: Process the table data
@@ -207,7 +211,7 @@ def main():
                     with st.spinner('Extracting features from the article...'):
                         # Initialize the ArticleScrapper, LLM processor and Data Preprocessor
                         article_scrapper  = ArticleScrapper(logger)
-                        llm_processor     = LLM(logger, selected_llm_option)
+                        llm_processor     = LLM(logger, selected_llm_option, llm_model, llm_model_api_key)
                         data_preprocessor = DataPreprocessor(logger)
                         article_details   = Utils(logger).get_features(article_scrapper, llm_processor, data_preprocessor, selected_date, article_url)
                         processed_articles.append(article_details)
