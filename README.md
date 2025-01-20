@@ -1,1 +1,1 @@
-# article-automation
+# article_automation
