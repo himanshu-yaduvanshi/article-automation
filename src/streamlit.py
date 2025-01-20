@@ -39,7 +39,7 @@ def main():
             }}
         </style>
         <div class="footer">
-            © {current_year} Abhishek. All rights reserved.
+            © {current_year}. All rights reserved.
         </div>
     """
     st.markdown(footer, unsafe_allow_html=True)
