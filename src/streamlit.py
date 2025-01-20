@@ -1,3 +1,4 @@
+import os
 import json
 import pandas as pd
 import streamlit as st
@@ -44,9 +45,10 @@ def main():
     st.markdown(footer, unsafe_allow_html=True)
 
     processed_articles = []
+    output_json_file = os.path.join(os.path.dirname(__file__), '..', 'output', 'output.json')
     try:
         # Load the existing file
-        with open(r"../output/output.json", 'r', encoding='utf-8') as file:
+        with open(output_json_file, 'r', encoding='utf-8') as file:
             processed_articles = json.load(file)
             #st.success("Output JSON File loaded successfully.", icon="🟢")
     except FileNotFoundError:
@@ -223,7 +225,7 @@ def main():
                         st.json(article_details)
     # Save the final ouput in JSON file
     try:
-        with open(r"../output/output.json", 'w', encoding='utf-8') as file:
+        with open(output_json_file, 'w', encoding='utf-8') as file:
             json.dump(processed_articles, file, indent=4)
         # st.success("Output JSON File saved successfully.", icon="🟢")
     except FileNotFoundError:
